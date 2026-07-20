@@ -12,17 +12,6 @@ This was a solo project, although my finacee did assist with the building of man
 We hope you enjoy it as much as we do .
 Get out there and RockiT like a spaceman!
 
-Contents:
-Features                      26
-How to use                    42
-How to set up                 54
-Rocket                        71
-Tower                         84
-Control Center physical       93
-Control Center IC10           140
-Colour Guide                  147
-
-
 The main features in the v1.0 release are:
 
 Rockets manage their own flights, allowing for easy multiflight without having to enter the rocket UI at all, in the current release

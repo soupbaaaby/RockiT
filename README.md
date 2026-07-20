@@ -135,6 +135,7 @@ This device set up is fairly easy, all the screw connections are named.
 
 Dial
 This device is simple to set up, all the screws are named.
+You can limit this to the number of rockets you have connected.
 Within the scripts you can either follow the colour scheme of the rockets I was using when building the system or set them your self
 on line 32 you can see the text that needs changing it is the number at the end you change to set the colour and you set it as such
 0	Blue	

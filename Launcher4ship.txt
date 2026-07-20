@@ -1,0 +1,95 @@
+#                 =======================================
+#                   ____            _  _________
+#                  |  _ \ ___   ___| ||_(_)  ___| v1.0
+#                  | |_) / _ \ / __| |/ / | |     By Soup
+#                  |  _ < (_) | (__|   <| | |
+#                  |_| \_\___/ \___|_|\_\_|_|
+#                 Rocket Launcher Controller 
+#                 =======================================
+
+alias button d0
+alias dial d1
+alias lever d2
+
+define ROCKITHASH 150135861
+define TXHASH -693235651
+
+waiting:
+yield
+l r2 lever Open
+beqz r2 secureButton
+
+s button Open 1
+s button Lock 0
+
+l r0 button Activate
+beqz r0 waiting
+
+l r1 dial Setting
+beq r1 0 launch0
+beq r1 1 launch1
+beq r1 2 launch2
+beq r1 3 launch3
+beq r1 4 launch4
+beq r1 5 launch5
+beq r1 6 launch6
+beq r1 7 launch7
+j waitRelease
+
+secureButton:
+s button Open 0
+s button Lock 1
+j waiting
+
+launch0:
+sbn TXHASH HASH("Logic Transmitter0") Setting 1
+j launchRocket
+
+launch1:
+sbn TXHASH HASH("Logic Transmitter1") Setting 1
+j launchRocket
+
+launch2:
+sbn TXHASH HASH("Logic Transmitter2") Setting 1
+j launchRocket
+
+launch3:
+sbn TXHASH HASH("Logic Transmitter3") Setting 1
+j launchRocket
+
+launch4:
+sbn TXHASH HASH("Logic Transmitter4") Setting 1
+j launchRocket
+
+launch5:
+sbn TXHASH HASH("Logic Transmitter5") Setting 1
+j launchRocket
+
+launch6:
+sbn TXHASH HASH("Logic Transmitter6") Setting 1
+j launchRocket
+
+launch7:
+sbn TXHASH HASH("Logic Transmitter7") Setting 1
+j launchRocket
+
+launchRocket:
+sbn ROCKITHASH HASH("RockiT Brain") Setting 1
+sleep 1
+
+sbn TXHASH HASH("Logic Transmitter0") Setting 0
+sbn TXHASH HASH("Logic Transmitter1") Setting 0
+sbn TXHASH HASH("Logic Transmitter2") Setting 0
+sbn TXHASH HASH("Logic Transmitter3") Setting 0
+sbn TXHASH HASH("Logic Transmitter4") Setting 0
+sbn TXHASH HASH("Logic Transmitter5") Setting 0
+sbn TXHASH HASH("Logic Transmitter6") Setting 0
+sbn TXHASH HASH("Logic Transmitter7") Setting 0
+
+waitRelease:
+yield
+l r2 lever Open
+beqz r2 secureButton
+l r0 button Activate
+bnez r0 waitRelease
+j waiting

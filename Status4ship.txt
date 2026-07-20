@@ -1,0 +1,125 @@
+#                 ===========================================
+#                   ____            _  _________
+#                  |  _ \ ___   ___| ||_(_)  ___| v1.0
+#                  | |_) / _ \ / __| |/ / | |     By Soup
+#                  |  _ < (_) | (__|   <| | |
+#                  |_| \_\___/ \___|_|\_\_|_|
+#                 Rocket Launch Status Feedback 
+#                 ===========================================
+alias light d0
+alias dial d1
+define AVIONICSHASH 808389066
+define BATTERYHASH -1125305264
+define ANALYZERHASH -2113838091
+define MEMORYHASH -851746783
+define MINERHASH -2087223687
+define CHARGEREADY 0.99
+define FUELREADY 0.95
+define DRILLREADY 0.15
+alias currentSite r0
+alias destination r1
+alias charge r2
+alias flashState r3
+alias homeSite r4
+alias selectedRocket r5
+alias volume r6
+alias liquid r7
+alias fuelRatio r8
+alias rocketType r9
+alias drillHealth r10
+move flashState 0
+main:
+yield
+l selectedRocket dial Setting
+beq selectedRocket 0 home0
+beq selectedRocket 1 home1
+beq selectedRocket 2 home2
+beq selectedRocket 3 home3
+beq selectedRocket 4 home4
+beq selectedRocket 5 home5
+beq selectedRocket 6 home6
+beq selectedRocket 7 home7
+j main
+home0:
+lbn rocketType MEMORYHASH HASH("Logic Memory00") Setting Average
+lbn homeSite MEMORYHASH HASH("Logic Memory01") Setting Average
+j readRocket
+home1:
+lbn rocketType MEMORYHASH HASH("Logic Memory10") Setting Average
+lbn homeSite MEMORYHASH HASH("Logic Memory11") Setting Average
+j readRocket
+home2:
+lbn rocketType MEMORYHASH HASH("Logic Memory20") Setting Average
+lbn homeSite MEMORYHASH HASH("Logic Memory21") Setting Average
+j readRocket
+home3:
+lbn rocketType MEMORYHASH HASH("Logic Memory30") Setting Average
+lbn homeSite MEMORYHASH HASH("Logic Memory31") Setting Average
+j readRocket
+home4:
+lbn rocketType MEMORYHASH HASH("Logic Memory40") Setting Average
+lbn homeSite MEMORYHASH HASH("Logic Memory41") Setting Average
+j readRocket
+home5:
+lbn rocketType MEMORYHASH HASH("Logic Memory50") Setting Average
+lbn homeSite MEMORYHASH HASH("Logic Memory51") Setting Average
+j readRocket
+home6:
+lbn rocketType MEMORYHASH HASH("Logic Memory60") Setting Average
+lbn homeSite MEMORYHASH HASH("Logic Memory61") Setting Average
+j readRocket
+home7:
+lbn rocketType MEMORYHASH HASH("Logic Memory70") Setting Average
+lbn homeSite MEMORYHASH HASH("Logic Memory71") Setting Average
+j readRocket
+readRocket:
+lb currentSite AVIONICSHASH CurrentCode Average
+lb destination AVIONICSHASH DestinationCode Average
+lb charge BATTERYHASH Ratio Average
+beqz currentSite offline
+bne currentSite homeSite away
+bne rocketType 0 checkMission
+lb drillHealth MINERHASH DrillCondition Average
+blt drillHealth DRILLREADY maintenance
+checkMission:
+blt charge CHARGEREADY restocking
+lb volume ANALYZERHASH Volume Average
+lb liquid ANALYZERHASH VolumeOfLiquid Average
+blez volume restocking
+div fuelRatio liquid volume
+blt fuelRatio FUELREADY restocking
+beqz destination noMission
+s light Color 2
+s light On 1
+j main
+noMission:
+s light Color 5
+s light On 1
+j main
+restocking:
+s light Color 5
+xor flashState flashState 1
+s light On flashState
+sleep 0.5
+j main
+maintenance:
+s light Color 4
+xor flashState flashState 1
+s light On flashState
+sleep 0.5
+j main
+offline:
+s light Color 4
+s light On 1
+j main
+away:
+beq destination homeSite returning
+s light Color 0
+s light On 1
+j main
+returning:
+s light Color 0
+xor flashState flashState 1
+s light On flashState
+sleep 0.5
+j main

@@ -1,0 +1,123 @@
+#                 =======================================
+#                   ____            _  _________
+#                  |  _ \ ___   ___| ||_(_)  ___| v1.0
+#                  | |_) / _ \ / __| |/ / | |     By Soup
+#                  |  _ < (_) | (__|   <| | |
+#                  |_| \_\___/ \___|_|\_\_|_|
+#                 Automated Refueling System - Oxy Editon
+#                 =======================================
+alias fuelAnalyser d0
+alias fuelPump d1
+alias oxyAnalyser d2
+alias oxyPump d3
+alias umbilical d4
+define ANALYSERHASH -2113838091
+define MAXFLOW 10
+define FILLTAPER 0.75
+define FILLSTOP 0.97
+define PRESSURETAPER 2500
+define PRESSURESTOP 5000
+
+start:
+s fuelPump Setting 0
+s fuelPump On 0
+s oxyPump Setting 0
+s oxyPump On 0
+
+main:
+yield
+
+l r15 umbilical Error
+beq r15 1 allOff
+
+# ---------------- FUEL ----------------
+l r0 fuelAnalyser Pressure
+l r1 fuelAnalyser Volume
+l r2 fuelAnalyser VolumeOfLiquid
+
+blez r1 fuelStop
+bge r0 PRESSURESTOP fuelStop
+
+div r3 r2 r1
+bge r3 FILLSTOP fuelStop
+
+move r4 1
+move r5 1
+
+bgt r3 FILLTAPER fuelVolumeTaper
+j fuelCheckPressure
+
+fuelVolumeTaper:
+sub r4 FILLSTOP r3
+div r4 r4 0.22
+
+fuelCheckPressure:
+bgt r0 PRESSURETAPER fuelPressureTaper
+j fuelSet
+
+fuelPressureTaper:
+sub r5 PRESSURESTOP r0
+div r5 r5 2500
+
+fuelSet:
+min r6 r4 r5
+mul r6 r6 MAXFLOW
+blez r6 fuelStop
+s fuelPump On 1
+s fuelPump Setting r6
+j oxyControl
+
+fuelStop:
+s fuelPump Setting 0
+s fuelPump On 0
+
+# -------------- OXIDISER --------------
+oxyControl:
+s oxyAnalyser On 1
+l r0 oxyAnalyser Pressure
+l r1 oxyAnalyser Volume
+l r2 oxyAnalyser VolumeOfLiquid
+
+blez r1 oxyStop
+bge r0 PRESSURESTOP oxyStop
+
+div r3 r2 r1
+bge r3 FILLSTOP oxyStop
+
+move r4 1
+move r5 1
+
+bgt r3 FILLTAPER oxyVolumeTaper
+j oxyCheckPressure
+
+oxyVolumeTaper:
+sub r4 FILLSTOP r3
+div r4 r4 0.22
+
+oxyCheckPressure:
+bgt r0 PRESSURETAPER oxyPressureTaper
+j oxySet
+
+oxyPressureTaper:
+sub r5 PRESSURESTOP r0
+div r5 r5 2500
+
+oxySet:
+min r6 r4 r5
+mul r6 r6 MAXFLOW
+blez r6 oxyStop
+s oxyPump On 1
+s oxyPump Setting r6
+j main
+
+oxyStop:
+s oxyPump Setting 0
+s oxyPump On 0
+j main
+
+allOff:
+s fuelPump Setting 0
+s fuelPump On 0
+s oxyPump Setting 0
+s oxyPump On 0
+j main

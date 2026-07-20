@@ -1,0 +1,128 @@
+#                   ____            _  _________
+#                  |  _ \ ___   ___| ||_(_)  ___| v1.0
+#                  | |_) / _ \ / __| |/ / | |     By Soup
+#                  |  _ < (_) | (__|   <| | |
+#                  |_| \_\___/ \___|_|\_\_|_|
+#                 Rocket Selection Controller
+alias dial d0
+alias light d1
+define UPLINKHASH -124589902
+main:
+yield
+l r0 dial Setting
+beq r0 0 select0
+beq r0 1 select1
+beq r0 2 select2
+beq r0 3 select3
+beq r0 4 select4
+beq r0 5 select5
+beq r0 6 select7
+beq r0 7 select7
+j allOff
+select0:
+sbn UPLINKHASH HASH("Logic Uplink0") On 1
+sbn UPLINKHASH HASH("Logic Uplink1") On 0
+sbn UPLINKHASH HASH("Logic Uplink2") On 0
+sbn UPLINKHASH HASH("Logic Uplink3") On 0
+sbn UPLINKHASH HASH("Logic Uplink4") On 0
+sbn UPLINKHASH HASH("Logic Uplink5") On 0
+sbn UPLINKHASH HASH("Logic Uplink6") On 0
+sbn UPLINKHASH HASH("Logic Uplink7") On 0
+s light On 1
+s light Color 4
+j main
+select1:
+sbn UPLINKHASH HASH("Logic Uplink0") On 0
+sbn UPLINKHASH HASH("Logic Uplink1") On 1
+sbn UPLINKHASH HASH("Logic Uplink2") On 0
+sbn UPLINKHASH HASH("Logic Uplink3") On 0
+sbn UPLINKHASH HASH("Logic Uplink4") On 0
+sbn UPLINKHASH HASH("Logic Uplink5") On 0
+sbn UPLINKHASH HASH("Logic Uplink6") On 0
+sbn UPLINKHASH HASH("Logic Uplink7") On 0
+s light On 1
+s light Color 7
+j main
+select2:
+sbn UPLINKHASH HASH("Logic Uplink0") On 0
+sbn UPLINKHASH HASH("Logic Uplink1") On 0
+sbn UPLINKHASH HASH("Logic Uplink2") On 1
+sbn UPLINKHASH HASH("Logic Uplink3") On 0
+sbn UPLINKHASH HASH("Logic Uplink4") On 0
+sbn UPLINKHASH HASH("Logic Uplink5") On 0
+sbn UPLINKHASH HASH("Logic Uplink6") On 0
+sbn UPLINKHASH HASH("Logic Uplink7") On 0
+s light On 1
+s light Color 5
+j main
+select3:
+sbn UPLINKHASH HASH("Logic Uplink0") On 0
+sbn UPLINKHASH HASH("Logic Uplink1") On 0
+sbn UPLINKHASH HASH("Logic Uplink2") On 0
+sbn UPLINKHASH HASH("Logic Uplink3") On 1
+sbn UPLINKHASH HASH("Logic Uplink4") On 0
+sbn UPLINKHASH HASH("Logic Uplink5") On 0
+sbn UPLINKHASH HASH("Logic Uplink6") On 0
+sbn UPLINKHASH HASH("Logic Uplink7") On 0
+s light On 1
+s light Color 10
+j main
+select4:
+sbn UPLINKHASH HASH("Logic Uplink0") On 0
+sbn UPLINKHASH HASH("Logic Uplink1") On 0
+sbn UPLINKHASH HASH("Logic Uplink2") On 0
+sbn UPLINKHASH HASH("Logic Uplink3") On 0
+sbn UPLINKHASH HASH("Logic Uplink4") On 1
+sbn UPLINKHASH HASH("Logic Uplink5") On 0
+sbn UPLINKHASH HASH("Logic Uplink6") On 0
+sbn UPLINKHASH HASH("Logic Uplink7") On 0
+s light On 1
+s light Color 0
+j main
+select5:
+sbn UPLINKHASH HASH("Logic Uplink0") On 0
+sbn UPLINKHASH HASH("Logic Uplink1") On 0
+sbn UPLINKHASH HASH("Logic Uplink2") On 0
+sbn UPLINKHASH HASH("Logic Uplink3") On 0
+sbn UPLINKHASH HASH("Logic Uplink4") On 0
+sbn UPLINKHASH HASH("Logic Uplink5") On 1
+sbn UPLINKHASH HASH("Logic Uplink6") On 0
+sbn UPLINKHASH HASH("Logic Uplink7") On 0
+s light On 1
+s light Color 3
+j main
+select6:
+sbn UPLINKHASH HASH("Logic Uplink0") On 0 
+sbn UPLINKHASH HASH("Logic Uplink1") On 0
+sbn UPLINKHASH HASH("Logic Uplink2") On 0
+sbn UPLINKHASH HASH("Logic Uplink3") On 0
+sbn UPLINKHASH HASH("Logic Uplink4") On 0
+sbn UPLINKHASH HASH("Logic Uplink5") On 0
+sbn UPLINKHASH HASH("Logic Uplink6") On 1
+sbn UPLINKHASH HASH("Logic Uplink7") On 0
+s light On 1
+s light Color 0
+j main
+select7:
+sbn UPLINKHASH HASH("Logic Uplink0") On 0
+sbn UPLINKHASH HASH("Logic Uplink1") On 0
+sbn UPLINKHASH HASH("Logic Uplink2") On 0
+sbn UPLINKHASH HASH("Logic Uplink3") On 0
+sbn UPLINKHASH HASH("Logic Uplink4") On 0
+sbn UPLINKHASH HASH("Logic Uplink5") On 0
+sbn UPLINKHASH HASH("Logic Uplink6") On 0
+sbn UPLINKHASH HASH("Logic Uplink7") On 1
+s light On 1
+s light Color 0
+j main
+allOff:
+sbn UPLINKHASH HASH("Logic Uplink0") On 0
+sbn UPLINKHASH HASH("Logic Uplink1") On 0
+sbn UPLINKHASH HASH("Logic Uplink2") On 0
+sbn UPLINKHASH HASH("Logic Uplink3") On 0
+sbn UPLINKHASH HASH("Logic Uplink4") On 0
+sbn UPLINKHASH HASH("Logic Uplink5") On 0
+sbn UPLINKHASH HASH("Logic Uplink6") On 0
+sbn UPLINKHASH HASH("Logic Uplink7") On 0
+s light On 0
+j main

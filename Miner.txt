@@ -1,0 +1,114 @@
+#                 =======================================
+#                   ____            _  _________
+#                  |  _ \ ___   ___| ||_(_)  ___| v1.0
+#                  | |_) / _ \ / __| |/ / | |     By Soup
+#                  |  _ < (_) | (__|   <| | |
+#                  |_| \_\___/ \___|_|\_\_|_|
+#                 Autonomous Mining Rocket Controller
+#                 =======================================
+
+alias avionics d0
+alias engine d1
+alias miner d2
+alias mainBattery d3
+alias returnBattery d4
+alias cargo d5
+
+alias destination r10
+alias homeSite r11
+
+define ANALYSERHASH -2113838091
+
+define MINING 2
+define IDLE 1
+define LOWBATTERY 0.01
+define CARGOFULL 1
+
+start:
+s engine On 0
+s miner On 0
+s avionics Mode IDLE
+s cargo Open 1
+s cargo On 1
+s db Setting 0
+
+waiting:
+yield
+l r0 db Setting
+bne r0 1 waiting
+
+l homeSite avionics CurrentCode
+l destination avionics DestinationCode
+
+s cargo On 0
+s miner On 0
+s avionics Mode IDLE
+s avionics AutoLand 0
+s avionics AutoShutOff 0
+
+sleep 30
+
+s returnBattery On 0
+s engine On 1
+
+waitDestination:
+yield
+l r0 avionics CurrentCode
+bne r0 destination waitDestination
+s engine On 0
+s miner On 1
+yield
+s avionics Mode MINING
+yield
+
+mining:
+l r0 mainBattery Ratio
+ble r0 LOWBATTERY returnHome
+
+l r0 miner DrillCondition
+blez r0 returnHome
+
+l r0 cargo Ratio
+bge r0 CARGOFULL returnHome
+
+l r0 avionics MinedQuantity
+l r1 avionics TotalQuantity
+blez r1 checkMode
+bge r0 r1 siteComplete
+
+checkMode:
+l r0 avionics Mode
+bne r0 MINING returnHome
+yield
+j mining
+
+siteComplete:
+move destination homeSite
+j returnHome
+
+returnHome:
+s avionics Mode IDLE
+s miner On 0
+s returnBattery On 1
+yield
+
+s avionics DestinationCode homeSite
+s engine On 1
+s avionics AutoLand 1
+s avionics AutoShutOff 1
+
+waitHome:
+yield
+l r0 avionics CurrentCode
+bne r0 homeSite waitHome
+sleep 5
+s engine On 0
+s miner On 0
+s avionics Mode IDLE
+s returnBattery On 1
+sb -2113838091 On 1
+s cargo Open 1
+s cargo On 1
+s avionics DestinationCode destination
+s db Setting 0
+j waiting

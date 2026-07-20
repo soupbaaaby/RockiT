@@ -1,0 +1,88 @@
+#                 ============================================
+#                   ____            _  _________
+#                  |  _ \ ___   ___| ||_(_)  ___| v1.0
+#                  | |_) / _ \ / __| |/ / | |     By Soup
+#                  |  _ < (_) | (__|   <| | |
+#                  |_| \_\___/ \___|_|\_\_|_|
+#                 Automated Refueling System - MonoProp Editon
+#                 ============================================
+
+alias analyser d0
+alias pump d1
+alias umbilical d2
+
+alias pressure r0
+alias volume r1
+alias liquid r2
+alias fillRatio r3
+alias volumeLimit r4
+alias pressureLimit r5
+alias flow r6
+
+define ANALYSERHASH -2113838091
+
+define MAXFLOW 10
+define FILLTAPER 0.75
+define FILLSTOP 0.97
+define PRESSURETAPER 2500
+define PRESSURESTOP 5000
+
+start:
+s pump Setting 0
+s pump On 0
+
+main:
+yield
+
+l r15 umbilical Error
+beq r15 1 allOff
+
+l pressure analyser Pressure
+l volume analyser Volume
+l liquid analyser VolumeOfLiquid
+
+blez volume stop
+
+bge pressure PRESSURESTOP stop
+
+div fillRatio liquid volume
+
+bge fillRatio FILLSTOP stop
+
+move volumeLimit 1
+move pressureLimit 1
+
+
+bgt fillRatio FILLTAPER volumeTaper
+j checkPressure
+
+volumeTaper:
+sub volumeLimit FILLSTOP fillRatio
+div volumeLimit volumeLimit 0.22
+
+checkPressure:
+bgt pressure PRESSURETAPER pressureTaper
+j setFlow
+
+pressureTaper:
+sub pressureLimit PRESSURESTOP pressure
+div pressureLimit pressureLimit 2500
+
+setFlow:
+min flow volumeLimit pressureLimit
+mul flow flow MAXFLOW
+blez flow stop
+
+s pump On 1
+s pump Setting flow
+j main
+
+stop:
+s pump Setting 0
+s pump On 0
+j main
+
+allOff:
+s pump Setting 0
+s pump On 0
+j main

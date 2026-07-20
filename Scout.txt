@@ -1,0 +1,101 @@
+#                 =======================================
+#                   ____            _  _________
+#                  |  _ \ ___   ___| ||_(_)  ___| v1.0
+#                  | |_) / _ \ / __| |/ / | |     By Soup
+#                  |  _ < (_) | (__|   <| | |
+#                  |_| \_\___/ \___|_|\_\_|_|
+#                 Autonomous Discovery Rocket Controller
+#                 =======================================
+
+alias avionics d0
+alias engine d1
+alias scanner d2
+alias mainBattery d3
+alias returnBattery d4
+
+alias destination r10
+alias homeSite r11
+
+define IDLE 1
+define DISCOVER 4
+define LOWBATTERY 0.01
+
+start:
+s engine On 0
+s scanner On 0
+s avionics Mode IDLE
+s db Setting 0
+
+waiting:
+yield
+r r0 db Setting
+bne r 0 1 waiting
+
+l homeSite avionics CurrentCode
+l destination avionics DestinationCode
+
+s scanner On 0
+s avionics Mode IDLE
+s avionics AutoLand 0
+s avionics AutoShutOff 0
+
+sleep 30
+
+s returnBattery On 0
+s engine On 1
+
+waitDestination:
+yield
+l r0 avionics CurrentCode
+bne r0 destination waitDestination
+
+s engine On 0
+s scanner On 1
+yield
+s avionics Mode DISCOVER
+yield
+
+discover:
+l r0 mainBattery Ratio
+ble r0 LOWBATTERY returnHome
+
+l r0 avionics Sites
+beq r0 9 siteComplete
+
+checkMode:
+l r0 avionics Mode
+bne r0 DISCOVER returnHome
+yield
+j discover
+
+siteComplete:
+move destination homeSite
+j returnHome
+
+returnHome:
+s avionics Mode IDLE
+s scanner On 0
+s returnBattery On 1
+yield
+
+s avionics DestinationCode homeSite
+s engine On 1
+s avionics AutoLand 1
+s avionics AutoShutOff 1
+
+waitHome:
+yield
+l r0 avionics CurrentCode
+bne r0 homeSite waitHome
+
+sleep 5
+
+s engine On 0
+s scanner On 0
+s avionics Mode IDLE
+s returnBattery On 1
+sb -2113838091 On 1
+
+s avionics DestinationCode destination
+s db Setting 0
+j waiting

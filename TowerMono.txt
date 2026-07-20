@@ -1,0 +1,62 @@
+#                 =======================================
+#                   ____            _  _________
+#                  |  _ \ ___   ___| ||_(_)  ___| v1.0
+#                  | |_) / _ \ / __| |/ / | |     By Soup
+#                  |  _ < (_) | (__|   <| | |
+#                  |_| \_\___/ \___|_|\_\_|_|
+#                 Autonomous Landing Tower Controller
+#                       Mono Prop Edition
+#                 =======================================
+
+alias powerUmb d0
+alias chuteUmb d1
+alias fuelUmb d2
+alias signal d3
+
+define LIGHTHASH -1535893860
+
+start:
+sb LIGHTHASH On 0
+s db Setting 0
+
+# STATE 0 - WAITING
+waiting:
+yield
+l r0 signal Setting
+bne r0 1 waiting
+s db Setting 1
+sb LIGHTHASH On 1
+s powerUmb Open 0
+s chuteUmb Open 0
+s fuelUmb Open 0
+sleep 40
+sb LIGHTHASH On 0
+
+waitForRocket:
+yield
+l r0 powerUmb Error
+bnez r0 waitForRocket
+l r0 chuteUmb Error
+bnez r0 waitForRocket
+l r0 fuelUmb Error
+bnez r0 waitForRocket
+s powerUmb Open 1
+s chuteUmb Open 1
+s fuelUmb Open 1
+
+confirmExtended:
+yield
+l r0 powerUmb Open
+beqz r0 waitForRocket
+l r0 chuteUmb Open
+beqz r0 waitForRocket
+l r0 fuelUmb Open
+beqz r0 waitForRocket
+s db Setting 0
+
+waitReset:
+yield
+l r0 signal Setting
+bnez r0 waitReset
+
+j waiting

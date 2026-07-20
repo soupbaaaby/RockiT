@@ -46,9 +46,13 @@ Before you begin
 
 Each rocket will require : 1 IC housing and chip, 1 pipe analyser 
 (for rockets that use oxy and add another analyser to the oxy line, it works on averages so its fine)
-Each tower will require :  2 IC housings and chips, 1  pipe analyser, 1 turbo pump
+
+Each tower will require :  2 IC housings and chips, 1  pipe analyser, 1 turbo pump (2 of each if your running dual fuel)
+
 Mission control will require : 3 IC housings and chips, 3 logic switch's, 2 lights
+
 Communications will requre, per rocket : 1 rocket datalink, 1 logic transmitter, 2 logic memory
+
 
 Be aware when setting this up computers count from 0, not 1! So the first rocket will be 0!
 To expose named screws turn the power on the IC housing after putting in the chips.

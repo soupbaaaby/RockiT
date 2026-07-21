@@ -8,7 +8,8 @@
 #
 
 Welcome to RockiT! This is a all in one system for taking the micro management out of rocketeering!
-This was a solo project, although my finacee did assist with the building of many of the rockets this was tested and built in.
+This was a solo project, although my finacee did assist with the building of many of the rockets this was tested and built in,
+alongside endless encouragement that helped us reach 1.0.
 We hope you enjoy it as much as we do .
 Get out there and RockiT like a spaceman!
 

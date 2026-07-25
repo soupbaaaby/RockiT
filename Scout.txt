@@ -1,10 +1,10 @@
 #                 =======================================
 #                   ____            _  _________
-#                  |  _ \ ___   ___| ||_(_)  ___| v1.0
+#                  |  _ \ ___   ___| ||_(_)  ___| v0.1
 #                  | |_) / _ \ / __| |/ / | |     By Soup
 #                  |  _ < (_) | (__|   <| | |
 #                  |_| \_\___/ \___|_|\_\_|_|
-#                 Autonomous Discovery Rocket Controller
+#                 Autonomous Survey Rocket Controller
 #                 =======================================
 
 alias avionics d0
@@ -28,8 +28,8 @@ s db Setting 0
 
 waiting:
 yield
-r r0 db Setting
-bne r 0 1 waiting
+l r0 db Setting
+bne r0 1 waiting
 
 l homeSite avionics CurrentCode
 l destination avionics DestinationCode

@@ -16,7 +16,7 @@ beq r0 2 select2
 beq r0 3 select3
 beq r0 4 select4
 beq r0 5 select5
-beq r0 6 select7
+beq r0 6 select6
 beq r0 7 select7
 j allOff
 select0:
